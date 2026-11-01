@@ -701,6 +701,8 @@ export function renderAppHtml() {
     const USER_ID = sessionStorage.getItem('pulseroom_uid') || ('eng-' + Math.random().toString(36).slice(2, 8));
     sessionStorage.setItem('pulseroom_uid', USER_ID);
 
+    const savedName = sessionStorage.getItem('pulseroom_name');
+    if (savedName && savedName.includes('Kaan')) sessionStorage.removeItem('pulseroom_name');
     const USER_NAME = urlParams.get('name') || sessionStorage.getItem('pulseroom_name') || DEFAULT_NAMES[seatIdx % DEFAULT_NAMES.length];
     sessionStorage.setItem('pulseroom_name', USER_NAME);
     const USER_COLOR = PALETTE[seatIdx % PALETTE.length];
@@ -1030,13 +1032,38 @@ export function renderAppHtml() {
       if (particles.length > 260) particles.splice(0, particles.length - 260);
     }
 
-    function drawCanvas() {
+    // World-to-Canvas Auto-Fit Transform so all nodes always fit between top HUD and bottom toolbar
+    const WORLD_W = 1040;
+    const WORLD_H = 560;
+    function getCanvasTransform() {
       const w = canvas.width / window.devicePixelRatio;
       const h = canvas.height / window.devicePixelRatio;
+      const topPad = 78;
+      const bottomPad = 46;
+      const availW = Math.max(200, w - 24);
+      const availH = Math.max(160, h - topPad - bottomPad);
+      const scale = Math.min(availW / WORLD_W, availH / WORLD_H);
+      const offsetX = (w - WORLD_W * scale) / 2;
+      const offsetY = topPad + (availH - WORLD_H * scale) / 2;
+      return { w, h, scale, offsetX, offsetY };
+    }
+    function screenToWorld(sx, sy) {
+      const { scale, offsetX, offsetY } = getCanvasTransform();
+      return {
+        x: Math.round((sx - offsetX) / scale),
+        y: Math.round((sy - offsetY) / scale)
+      };
+    }
+
+    function drawCanvas() {
+      const { w, h, scale, offsetX, offsetY } = getCanvasTransform();
       ctx.clearRect(0, 0, w, h);
 
       if (roomState) {
         spawnParticles();
+        ctx.save();
+        ctx.translate(offsetX, offsetY);
+        ctx.scale(scale, scale);
 
         // Draw directed edges
         for (const edge of roomState.edges) {
@@ -1065,7 +1092,7 @@ export function renderAppHtml() {
           const x = p.fromX + (p.toX - p.fromX) * p.t;
           const y = p.fromY + (p.toY - p.fromY) * p.t;
           ctx.beginPath();
-          ctx.arc(x, y, p.status === 'critical' ? 3.5 : 2.6, 0, Math.PI * 2);
+          ctx.arc(x, y, p.status === 'critical' ? 3.8 : 2.8, 0, Math.PI * 2);
           ctx.fillStyle = p.status === 'critical' ? '#f43f5e' : (p.status === 'degraded' ? '#f59e0b' : '#34d399');
           ctx.fill();
         }
@@ -1130,6 +1157,8 @@ export function renderAppHtml() {
           if (p.userId === USER_ID) continue;
           drawCursor(p.x, p.y, p.name, p.color, p.tool, p.bubbleText);
         }
+
+        ctx.restore();
       }
 
       requestAnimationFrame(drawCanvas);
@@ -1188,8 +1217,7 @@ export function renderAppHtml() {
     let lastCursorSent = 0;
     canvas.addEventListener('mousemove', (e) => {
       const rect = canvas.getBoundingClientRect();
-      const x = Math.round(e.clientX - rect.left);
-      const y = Math.round(e.clientY - rect.top);
+      const { x, y } = screenToWorld(e.clientX - rect.left, e.clientY - rect.top);
       myCursor.x = x;
       myCursor.y = y;
 
@@ -1215,8 +1243,7 @@ export function renderAppHtml() {
     canvas.addEventListener('mousedown', (e) => {
       if (!roomState) return;
       const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const { x, y } = screenToWorld(e.clientX - rect.left, e.clientY - rect.top);
 
       const hit = roomState.nodes.find(n => Math.abs(n.x - x) <= 83 && Math.abs(n.y - y) <= 37);
       if (hit) {
