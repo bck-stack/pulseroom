@@ -11,3 +11,7 @@
 ## 2026-11-01 — Deterministic Telemetry Simulation Engine with Live Metric Recovery
 - **Decision:** Drive each outage scenario (`db-pool-exhaustion`, `webhook-retry-storm`, `jwt-split-brain`, `worker-memory-leak`) from a deterministic graph tick loop where node error rates, p99 latency, and packet drop probability dynamically recompute based on active remediation cards.
 - **Why:** Static mockups don't show whether a fix actually worked or made things worse. By propagating traffic along directed edges every tick, applying a bad fix (e.g., restarting the API gateway during a downstream DB lock) visibly spikes retries, while the right fix drains the queue and restores green packet flow across all connected clients simultaneously.
+
+## 2026-11-01 — '/' Hotkey Opens Live Cursor Chat on the Topology Canvas
+- **Decision:** Pressing `/` while the topology canvas is focused opens the live cursor chat bubble anchored to that responder's cursor, and every message typed there is broadcast over WebSocket to all connected responders in real time.
+- **Why:** Incident responders already track each other via cursor telemetry; letting them annotate the exact spot on the topology map without leaving the canvas keeps coordination inside the shared view instead of a separate chat sidebar, and the WebSocket broadcast keeps the ephemeral chat frames on the same transport as cursor frames so ordering stays consistent.
