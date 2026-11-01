@@ -11,3 +11,7 @@
 ## Quorum Deadlock in Single-Reviewer Testing
 - If a `BREAKING` remediation card requires 2 approvals, a developer testing alone in a single tab would be blocked unless a second participant joins.
 - **Fix:** Added both instant multi-tab room sync (opening a second browser window joins as a second engineer Seat #2) and a toggleable "Simulated SRE Peer (Maya)" autonomous teammate who inspects nodes and casts quorum votes in real time.
+
+## Cursor Frames vs. `stateVersion` Heartbeat Rates
+- Cursor frames broadcast over WebSocket run at roughly `22 Hz` (once per animation tick), while `stateVersion` only increments on causal room actions (seat joins/leaves, card casts, votes) — so a quiet room can stream cursors without the version ever moving.
+- Don't key cache-busting or re-render logic off `stateVersion` expecting it to track cursor movement; subscribe to cursor frames directly.
