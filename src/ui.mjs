@@ -209,9 +209,16 @@ export function renderAppHtml() {
     }
     .left-column {
       display: grid;
-      grid-template-rows: 1fr 255px;
+      grid-template-rows: 1fr 225px;
       overflow: hidden;
       border-right: 1px solid var(--border);
+    }
+    @media (max-width: 1024px) {
+      body { overflow-y: auto; height: auto; }
+      .topbar { flex-wrap: wrap; height: auto; padding: 10px 12px; }
+      .workspace { grid-template-columns: 1fr; height: auto; overflow: visible; }
+      .left-column { grid-template-rows: 420px 260px; border-right: none; }
+      .telemetry-panel { grid-template-columns: 1fr; }
     }
 
     /* Canvas Stage */

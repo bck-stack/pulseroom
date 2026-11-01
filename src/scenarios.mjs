@@ -7,13 +7,13 @@ export const SCENARIOS = {
     summary: 'Checkout 504 timeouts spiked to 38.4% after v2.14.0 deployed an unindexed webhook status update inside an open transaction.',
     rootCauseHint: 'webhook-worker holds open transactions while waiting on external HTTP callbacks, exhausting pg-primary max_connections=200.',
     nodes: [
-      { id: 'edge-cdn', label: 'Edge Ingress', role: 'Cloudflare Anycast', x: 110, y: 310, status: 'healthy', rps: 14200, latencyMs: 14, errorRate: 0.2, cpu: 31 },
-      { id: 'api-gw', label: 'API Gateway', role: 'Envoy Mesh', x: 340, y: 310, status: 'degraded', rps: 13850, latencyMs: 640, errorRate: 18.4, cpu: 68 },
-      { id: 'auth-svc', label: 'Auth Service', role: 'Go / gRPC', x: 580, y: 130, status: 'healthy', rps: 6400, latencyMs: 19, errorRate: 0.1, cpu: 42 },
-      { id: 'redis-cache', label: 'Redis Cluster', role: 'Session & Rate Limit', x: 860, y: 130, status: 'healthy', rps: 19200, latencyMs: 3, errorRate: 0.0, cpu: 29 },
-      { id: 'checkout-svc', label: 'Checkout API', role: 'Node.js Workers', x: 580, y: 310, status: 'critical', rps: 4200, latencyMs: 1840, errorRate: 38.4, cpu: 89 },
-      { id: 'webhook-worker', label: 'Webhook Dispatcher', role: 'Retry Queue Consumer', x: 580, y: 500, status: 'critical', rps: 3100, latencyMs: 2450, errorRate: 64.0, cpu: 96 },
-      { id: 'pg-primary', label: 'Postgres Primary', role: 'pg-east-1a (200/200 conn)', x: 920, y: 390, status: 'critical', rps: 7300, latencyMs: 1920, errorRate: 41.2, cpu: 99 }
+      { id: 'edge-cdn', label: 'Edge Ingress', role: 'Cloudflare Anycast', x: 115, y: 215, status: 'healthy', rps: 14200, latencyMs: 14, errorRate: 0.2, cpu: 31 },
+      { id: 'api-gw', label: 'API Gateway', role: 'Envoy Mesh', x: 335, y: 215, status: 'degraded', rps: 13850, latencyMs: 640, errorRate: 18.4, cpu: 68 },
+      { id: 'auth-svc', label: 'Auth Service', role: 'Go / gRPC', x: 575, y: 105, status: 'healthy', rps: 6400, latencyMs: 19, errorRate: 0.1, cpu: 42 },
+      { id: 'redis-cache', label: 'Redis Cluster', role: 'Session & Rate Limit', x: 855, y: 105, status: 'healthy', rps: 19200, latencyMs: 3, errorRate: 0.0, cpu: 29 },
+      { id: 'checkout-svc', label: 'Checkout API', role: 'Node.js Workers', x: 575, y: 225, status: 'critical', rps: 4200, latencyMs: 1840, errorRate: 38.4, cpu: 89 },
+      { id: 'webhook-worker', label: 'Webhook Dispatcher', role: 'Retry Queue Consumer', x: 575, y: 345, status: 'critical', rps: 3100, latencyMs: 2450, errorRate: 64.0, cpu: 96 },
+      { id: 'pg-primary', label: 'Postgres Primary', role: 'pg-east-1a (200/200 conn)', x: 885, y: 285, status: 'critical', rps: 7300, latencyMs: 1920, errorRate: 41.2, cpu: 99 }
     ],
     edges: [
       { from: 'edge-cdn', to: 'api-gw', traffic: 'high', status: 'healthy' },
