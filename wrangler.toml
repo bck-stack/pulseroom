@@ -1,0 +1,5 @@
+name = "pulseroom"
+main = "worker.mjs"
+compatibility_date = "2025-01-01"
+account_id = "019792a00bed4906ceb37adcf54f1bd8"
+workers_dev = true

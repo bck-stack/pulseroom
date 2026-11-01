@@ -1,0 +1,21 @@
+{
+  "name": "pulseroom",
+  "version": "1.0.0",
+  "description": "Real-time multiplayer incident war-room and interactive system topology canvas with live cursors, shared evidence pinning, and quorum-based remediation cards.",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.mjs",
+    "start": "node server.mjs",
+    "test": "node test-multiplayer.mjs"
+  },
+  "keywords": [
+    "multiplayer",
+    "incident-response",
+    "sre",
+    "websocket",
+    "collaborative",
+    "war-room"
+  ],
+  "author": "Bolat Zübeyr Çomak (bck-stack)",
+  "license": "MIT"
+}
