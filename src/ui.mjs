@@ -688,7 +688,7 @@ export function renderAppHtml() {
     const ROOM_ID = (urlParams.get('room') || 'WAR-ROOM-01').toUpperCase();
     const SEAT_NUM = urlParams.get('seat') || (sessionStorage.getItem('pulseroom_seat') || '');
     const PALETTE = ['#38bdf8', '#f43f5e', '#a855f7', '#eab308', '#ec4899', '#14b8a6'];
-    const DEFAULT_NAMES = ['Bolat (Lead SRE)', 'Kaan (Infra Eng)', 'Alex (DB Reliability)', 'Zin (Edge Ops)'];
+    const DEFAULT_NAMES = ['Bolat (Lead SRE)', 'Talha (Infra Eng)', 'Alex (DB Reliability)', 'Zin (Edge Ops)'];
 
     const seatIdx = SEAT_NUM ? (parseInt(SEAT_NUM, 10) - 1) : Math.floor(Math.random() * 100);
     const USER_ID = sessionStorage.getItem('pulseroom_uid') || ('eng-' + Math.random().toString(36).slice(2, 8));
@@ -1274,7 +1274,7 @@ export function renderAppHtml() {
       const nextUrl = new URL(window.location.href);
       nextUrl.searchParams.set('room', ROOM_ID);
       nextUrl.searchParams.set('seat', '2');
-      nextUrl.searchParams.set('name', 'Kaan (Infra Peer)');
+      nextUrl.searchParams.set('name', 'Talha (Infra Peer)');
       window.open(nextUrl.toString(), '_blank', 'width=1100,height=780');
     });
 
